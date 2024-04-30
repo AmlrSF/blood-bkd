@@ -21,6 +21,7 @@ const registerCustomer = async (req, res) => {
         lname,
         email,
         password,
+        userType
     } = req.body;
 
     console.log(req.body);
@@ -32,18 +33,19 @@ const registerCustomer = async (req, res) => {
             return res.status(201).json({ success: false, error: 'Email already in use' });
         }
 
-        // Generate a salt
-        const salt = await bcrypt.genSalt(10);
+        // // Generate a salt
+        // const salt = await bcrypt.genSalt(10);
 
-        // Hash the password using the generated salt
-        const hash = await bcrypt.hash(password, salt);
+        // // Hash the password using the generated salt
+        // const hash = await bcrypt.hash(password, salt);
 
         // Create a new customer with the hashed password
         const newCustomer = new Customer({
             firstName: fname,
             lastName: lname,
             email,
-            passwordHash: hash,
+            passwordHash: password,
+            userType,
         });
 
         // Save the new customer to the database
@@ -68,7 +70,7 @@ const loginCustomer = async (req, res) => {
         }
 
         
-        const passwordMatch = await bcrypt.compare(password, customer.passwordHash);
+        const passwordMatch =  password === customer.passwordHash;
 
         if (!passwordMatch) {
             return res.status(200).json({success:false, error: 'Invalid password' });

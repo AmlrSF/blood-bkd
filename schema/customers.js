@@ -14,6 +14,10 @@ const userSchema = new mongoose.Schema({
   },
   registrationDate: { type: Date, default: Date.now() },
   country: String,
+  userType: {
+    type: String,
+    enum: ['admission', 'blood bank', 'supplier']
+  }
 });
 
 const Customer = mongoose.model('User', userSchema);
