@@ -136,6 +136,8 @@ const updateCustomer = async (req, res) => {
         profileImage,
         bio,
         country,
+        passwordHash,
+        usertype
     } = req.body;
 
 
@@ -179,7 +181,9 @@ const updateCustomer = async (req, res) => {
               phoneNumber,
               profileImage: updatedProfileImage, // Use the updated profileImage here
               bio,
-              country
+              country,
+              passwordHash,
+              usertype
             },
             { new: true }
           );
