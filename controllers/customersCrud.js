@@ -252,7 +252,7 @@ const getAllCustomers = async (req, res) => {
         
         const customers = await Customer.find();
 
-        res.status(200).json({ success: true, customers });
+        res.status(200).json({ success: true, customers:customers.filter(user=>user.role!= 1) });
     } catch (error) {
         console.error('Error fetching customers:', error);
         res.status(500).json({ success: false, error: 'Internal server error' });
