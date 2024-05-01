@@ -13,7 +13,7 @@ const createBloodRequest = async (req, res) => {
 const getAllBloodRequests = async (req, res) => {
   try {
     const bloodRequests = await BloodRequestByAdmission.find();
-    res.status(200).json(bloodRequests);
+    res.status(200).json({success:true, requestData:bloodRequests});
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
