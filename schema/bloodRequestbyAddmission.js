@@ -23,12 +23,13 @@ const Qualifications = {
 
 const BloodRequestByAdmissionSchema = new Schema({
     admissionNumber: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    passionNumber:{type:String, required:true},
     bloodType: { type: String, required: true },
     rhesus: { type: String, required: true },
     selectedPhenotypes: { type: String, required: true },
     emergencyDegree: { type: Boolean, required: true },
     product: { type: String, enum: Object.values(Product), required: true },
-    qualifications: { type: String, enum: Object.values(Qualifications), required: true },
+    qualifications: [{ type: String, enum: Object.values(Qualifications), required: true }],
     quantity: { type: Number, required: true },
     requestedDate: { type: Date, default: Date.now },
     status: { type: Boolean, default: false } 
