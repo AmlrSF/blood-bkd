@@ -98,8 +98,9 @@ const activateBloodRequest = async (req, res) => {
       );
 
       
+      BloodRequestByAdmission.findByIdAndUpdate(requestId, {status:true},{new:true})
 
-      bloodRequest.status = true;
+      ///bloodRequest.status = true;
 
       // Save the updated blood request
       await bloodRequest.save();
