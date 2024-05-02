@@ -62,54 +62,54 @@ const deleteBloodRequestById = async (req, res) => {
 const activateBloodRequest = async (req, res) => {
   const requestId = req.params.id;
 
-  try {
-      // Get the blood request by ID
-      const bloodRequest = await BloodRequestByAdmission.findById(requestId);
+  try{
+    // Get the blood request by ID
+    const bloodRequest = await BloodRequestByAdmission.findById(requestId);
 
-      if (!bloodRequest) {
-          return res.status(200).json({ success: false, message: 'Blood request not found' });
-      }
+    if (!bloodRequest) {
+      return res.status(200).json({ success: false, message: 'Blood request not found' });
+    }
       
-      console.log(bloodRequest,bloodRequest.bloodType+bloodRequest.rhesus)
-      // Find available blood b,ags matching the request's type and product
-      const availableBags = await BloodBag.find({
-          type: bloodRequest.bloodType+bloodRequest.rhesus,
-          product: bloodRequest.product,
-          status: 'Available'
-      });
+    // If the request has already been activated
+    if (bloodRequest.status) {
+      return res.status(200).json({ success: false, message: 'Blood request has already been activated' });
+    }
 
-      console.log(availableBags)
-      console.log("--------------------------")
-      
+    // Find available blood bags matching the request's type and product
+    const availableBags = await BloodBag.find({
+      type: bloodRequest.bloodType + bloodRequest.rhesus,
+      product: bloodRequest.product,
+      status: 'Available'
+    });
 
-      // Check if there are enough available bags to fulfill the request
-      if (availableBags.length < bloodRequest.quantity) {
-          return res.status(200).json({ success: false, message: 'Insufficient blood bags available' });
-      }
+    // Check if there are enough available bags to fulfill the request
+    if (availableBags.length < bloodRequest.quantity) {
+      return res.status(200).json({ success: false, message: 'Insufficient blood bags available' });
+    }
 
-      // Limit the number of bags to the requested quantity
-      const selectedBags = availableBags.slice(0, bloodRequest.quantity);
-      bloodRequest.reservedBloodBags = selectedBags;
+    // Limit the number of bags to the requested quantity
+    const selectedBags = availableBags.slice(0, bloodRequest.quantity);
 
-      // Reserve the matched blood bags and update their status
-      await BloodBag.updateMany(
-          { _id: { $in: selectedBags.map(bag => bag._id) } },
-          { status: 'Reserved' }
-      );
+    // Reserve the matched blood bags and update their status
+    await BloodBag.updateMany(
+      { _id: { $in: selectedBags.map(bag => bag._id) } },
+      { status: 'Reserved' }
+    );
+    
+    bloodRequest.reservedBloodBags = selectedBags;
+    bloodRequest.status = true;
 
-      
-      BloodRequestByAdmission.findByIdAndUpdate(requestId, {status:true},{new:true})
+    // Save the updated blood request
+    await bloodRequest.save();
 
-      ///bloodRequest.status = true;
-
-      // Save the updated blood request
-      await bloodRequest.save();
-
-      res.status(200).json({ success: true, message: 'Blood request activated successfully', updatedBags });
-  } catch (error) {
-      res.status(500).json({ success: false, error: error.message });
+    res.status(200).json({ success: true, bloodRequest, message: 'Blood request activated successfully' });
+  
+  }catch (error) {
+    res.status(500).json({ error: error.message });
   }
+    
 };
+
 
 module.exports = {
   createBloodRequest,
