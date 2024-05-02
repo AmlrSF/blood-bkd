@@ -32,7 +32,9 @@ const BloodRequestByAdmissionSchema = new Schema({
     qualifications: [{ type: String, enum: Object.values(Qualifications), required: true }],
     quantity: { type: Number, required: true },
     requestedDate: { type: Date, default: Date.now },
-    status: { type: Boolean, default: false } 
+    status: { type: Boolean, default: false } ,
+    reservedBloodBags: [{ type: mongoose.Schema.Types.ObjectId, ref: 'BloodBag' }] // Assuming BloodBag is the model for blood bags
+
 });
 
 const BloodRequestByAdmission = mongoose.model('BloodRequestByAdmission', BloodRequestByAdmissionSchema);
