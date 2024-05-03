@@ -62,17 +62,32 @@ const deleteBloodRequestById = async (req, res) => {
 const activateBloodRequest = async (req, res) => {
   const requestId = req.params.id;
 
-  try{
+  try {
     // Get the blood request by ID
     const bloodRequest = await BloodRequestByAdmission.findById(requestId);
 
     if (!bloodRequest) {
       return res.status(200).json({ success: false, message: 'Blood request not found' });
     }
-      
+
     // If the request has already been activated
     if (bloodRequest.status) {
-      return res.status(200).json({ success: false, message: 'Blood request has already been activated' });
+      // Make reserved blood bags available again
+      await BloodBag.updateMany(
+        { _id: { $in: bloodRequest.reservedBloodBags.map(bag => bag._id) } },
+        { status: 'Available' }
+      );
+      
+      // Empty the reserved blood bags array in the request
+      bloodRequest.reservedBloodBags = [];
+
+      // Update the status of the request to false
+      bloodRequest.status = false;
+
+      // Save the updated blood request
+      await bloodRequest.save();
+
+      return res.status(200).json({ success: true, message: 'Blood request deactivated successfully' });
     }
 
     // Find available blood bags matching the request's type and product
@@ -95,7 +110,7 @@ const activateBloodRequest = async (req, res) => {
       { _id: { $in: selectedBags.map(bag => bag._id) } },
       { status: 'Reserved' }
     );
-    
+
     bloodRequest.reservedBloodBags = selectedBags;
     bloodRequest.status = true;
 
@@ -103,11 +118,10 @@ const activateBloodRequest = async (req, res) => {
     await bloodRequest.save();
 
     res.status(200).json({ success: true, bloodRequest, message: 'Blood request activated successfully' });
-  
-  }catch (error) {
-    res.status(500).json({ error: error.message });
+
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
   }
-    
 };
 
 
