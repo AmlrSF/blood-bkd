@@ -28,7 +28,7 @@ const getAllRequestBloodBags = async (req, res) => {
 const getRequestBloodBagById = async (req, res) => {
     try {
         const requestId = req.params.id;
-        const requestBloodBag = await RequestBloodBagByBloodBank.findById(requestId);
+        const requestBloodBag = await RequestBloodBagByBloodBank.findById(requestId).populate("requester", "firstName lastName profileImage userType");;
         if (!requestBloodBag) {
             return res.status(404).json({ message: 'Request for blood bag not found' });
         }
