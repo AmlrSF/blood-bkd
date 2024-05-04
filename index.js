@@ -6,6 +6,7 @@ const connectToMongoDb = require('./dbConnection/connect');
 const customer = require('./routes/customersRoute');
 const requestBloodRoute = require('./routes/bloodRequestRoute');
 const bloodBag = require('./routes/BoolBagRoute');
+const RequestBloodBags = require('./routes/requestBloodbagRoute');
 
 
 const cookieParser = require('cookie-parser');
@@ -23,6 +24,9 @@ app.use('/api/v1/customers', customer);
 app.use('/api/v1/requestBloodByAdmission', requestBloodRoute);
 
 app.use('/api/v1/BloodBags', bloodBag);
+
+app.use('/api/v1/RequestBloodBags', RequestBloodBags);
+
 
 
 
