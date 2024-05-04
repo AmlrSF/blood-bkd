@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const requestBloodBagByBloodBankSchema = new mongoose.Schema({
     requester: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Customer',
+        ref: 'User',
         required: true
     },
     bloodType: {
@@ -18,7 +18,9 @@ const requestBloodBagByBloodBankSchema = new mongoose.Schema({
     quantityOfBags: {
         type: Number,
         required: true
-    }
+    },
+    status: { type: Boolean, default: false } ,
+
 });
 
 const RequestBloodBagByBloodBank = mongoose.model('RequestBloodBagByBloodBank', requestBloodBagByBloodBankSchema);

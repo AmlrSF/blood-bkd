@@ -1,7 +1,7 @@
 const RequestBloodBagByBloodBank = require('../schema/RequestBloodBagByBloodBank');
 
 // Controller to create a new request for blood bags
-exports.createRequestBloodBag = async (req, res) => {
+const createRequestBloodBag = async (req, res) => {
     try {
         const requestBloodBag = new RequestBloodBagByBloodBank(req.body);
         const savedRequestBloodBag = await requestBloodBag.save();
@@ -12,18 +12,20 @@ exports.createRequestBloodBag = async (req, res) => {
 };
 
 // Controller to get all blood bag requests
-exports.getAllRequestBloodBags = async (req, res) => {
+const getAllRequestBloodBags = async (req, res) => {
     try {
-        const requestBloodBags = await RequestBloodBagByBloodBank.find()
-        .populate("requester", "firstName lastName profileImage")
-        res.status(200).json(requestBloodBags);
+        console.log("hha")
+        const requestBloodBags = await RequestBloodBagByBloodBank.find({})
+        .populate("requester", "firstName lastName profileImage userType");
+        console.log(requestBloodBags)
+        res.status(200).json({success:true, requestBloodBags});
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
 
 // Controller to get a specific blood bag request by ID
-exports.getRequestBloodBagById = async (req, res) => {
+const getRequestBloodBagById = async (req, res) => {
     try {
         const requestId = req.params.id;
         const requestBloodBag = await RequestBloodBagByBloodBank.findById(requestId);
@@ -37,7 +39,7 @@ exports.getRequestBloodBagById = async (req, res) => {
 };
 
 // Controller to update a blood bag request by ID
-exports.updateRequestBloodBagById = async (req, res) => {
+const updateRequestBloodBagById = async (req, res) => {
     try {
         const requestId = req.params.id;
         const updatedRequestBloodBag = await RequestBloodBagByBloodBank.findByIdAndUpdate(
@@ -55,7 +57,7 @@ exports.updateRequestBloodBagById = async (req, res) => {
 };
 
 // Controller to delete a blood bag request by ID
-exports.deleteRequestBloodBagById = async (req, res) => {
+const deleteRequestBloodBagById = async (req, res) => {
     try {
         const requestId = req.params.id;
         const deletedRequestBloodBag = await RequestBloodBagByBloodBank.findByIdAndDelete(requestId);
@@ -67,3 +69,12 @@ exports.deleteRequestBloodBagById = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+
+module.exports = {
+    createRequestBloodBag,
+    getAllRequestBloodBags,
+    deleteRequestBloodBagById,
+    updateRequestBloodBagById,
+    getRequestBloodBagById
+}
