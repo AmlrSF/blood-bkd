@@ -28,11 +28,12 @@ const getAllRequestBloodBags = async (req, res) => {
 const getRequestBloodBagById = async (req, res) => {
     try {
         const requestId = req.params.id;
-        const requestBloodBag = await RequestBloodBagByBloodBank.findById(requestId).populate("requester", "firstName lastName profileImage userType");;
+        const requestBloodBag = await RequestBloodBagByBloodBank.findById(requestId).populate("requester", "firstName lastName profileImage userType");
+        console.log(requestBloodBag)
         if (!requestBloodBag) {
             return res.status(404).json({ message: 'Request for blood bag not found' });
         }
-        res.status(200).json(requestBloodBag);
+        res.status(200).json({sucess:true,requestBloodBag});
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
