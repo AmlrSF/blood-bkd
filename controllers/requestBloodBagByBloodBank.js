@@ -17,8 +17,8 @@ const getAllRequestBloodBags = async (req, res) => {
         console.log("hha")
         const requestBloodBags = await RequestBloodBagByBloodBank.find({})
         .populate("requester", "firstName lastName profileImage userType");
-        console.log(requestBloodBags)
-        res.status(200).json({success:true, requestBloodBags});
+        //console.log(requestBloodBags)
+        res.status(200).json({success:true, requestBloodBags:requestBloodBags.reverse()});
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
