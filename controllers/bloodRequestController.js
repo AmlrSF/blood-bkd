@@ -25,7 +25,9 @@ const getAllBloodRequests = async (req, res) => {
 
 const getBloodRequestById = async (req, res) => {
   try {
-    const bloodRequest = await BloodRequestByAdmission.findById(req.params.id);
+    const bloodRequest = await BloodRequestByAdmission.findById(req.params.id)
+    .populate("admissionNumber", "firstName lastName profileImage")
+    .populate('reservedBloodBags');
     if (!bloodRequest) {
       return res.status(404).json({ error: 'Blood request not found' });
     }
