@@ -29,7 +29,7 @@ const getBloodRequestById = async (req, res) => {
     if (!bloodRequest) {
       return res.status(404).json({ error: 'Blood request not found' });
     }
-    res.status(200).json(bloodRequest);
+    res.status(200).json({ success: true, requestData: bloodRequest });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

@@ -8,7 +8,8 @@ const BloodBagSchema = new Schema({
         required: true
     },BagId : {
         type: String,
-        required: true
+        required: true,
+        
     },
     type: {
         type: String,
