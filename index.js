@@ -7,6 +7,8 @@ const customer = require('./routes/customersRoute');
 const requestBloodRoute = require('./routes/bloodRequestRoute');
 const bloodBag = require('./routes/BoolBagRoute');
 const RequestBloodBags = require('./routes/requestBloodbagRoute');
+const patient = require('./routes/PatientRoute');
+
 
 
 const cookieParser = require('cookie-parser');
@@ -27,7 +29,7 @@ app.use('/api/v1/BloodBags', bloodBag);
 
 app.use('/api/v1/RequestBloodBags', RequestBloodBags);
 
-
+app.use('/api/v1/patient', patient);
 
 
 

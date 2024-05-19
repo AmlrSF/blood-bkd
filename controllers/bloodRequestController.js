@@ -15,7 +15,8 @@ const getAllBloodRequests = async (req, res) => {
   try {
     const bloodRequests = await BloodRequestByAdmission.find()
     .populate("admissionNumber", "firstName lastName profileImage")
-    .populate('reservedBloodBags');
+    .populate('reservedBloodBags')
+    .populate('passionNumber');
     res.status(200).json({ success: true, requestData: bloodRequests });
   } catch (error) {
     res.status(500).json({ error: error.message });

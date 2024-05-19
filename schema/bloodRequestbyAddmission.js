@@ -23,7 +23,7 @@ const Qualifications = {
 
 const BloodRequestByAdmissionSchema = new Schema({
     admissionNumber: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    passionNumber:{type:String, required:true},
+    passionNumber : { type: mongoose.Schema.Types.ObjectId, ref: 'Patient', required: true },
     bloodType: { type: String, required: true },
     rhesus: { type: String, required: true },
     selectedPhenotypes: { type: String, required: true },
