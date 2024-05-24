@@ -12,6 +12,10 @@ const userSchema = new mongoose.Schema({
     type: Number,
     default: 0
   },
+  status:{
+    type: Boolean,
+    default: false
+  },
   registrationDate: { type: Date, default: Date.now() },
   country: String,
   userType: {

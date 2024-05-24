@@ -14,7 +14,7 @@ const createBloodRequest = async (req, res) => {
 const getAllBloodRequests = async (req, res) => {
   try {
     const bloodRequests = await BloodRequestByAdmission.find()
-    .populate("admissionNumber", "firstName lastName profileImage")
+    .populate("admissionNumber")
     .populate('reservedBloodBags')
     .populate('passionNumber');
     res.status(200).json({ success: true, requestData: bloodRequests });
@@ -27,8 +27,9 @@ const getAllBloodRequests = async (req, res) => {
 const getBloodRequestById = async (req, res) => {
   try {
     const bloodRequest = await BloodRequestByAdmission.findById(req.params.id)
-    .populate("admissionNumber", "firstName lastName profileImage")
-    .populate('reservedBloodBags');
+    .populate("admissionNumber")
+    .populate('reservedBloodBags')
+    .populate('passionNumber');
     if (!bloodRequest) {
       return res.status(404).json({ error: 'Blood request not found' });
     }
