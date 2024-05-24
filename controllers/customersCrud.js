@@ -137,6 +137,7 @@ const updateCustomer = async (req, res) => {
         bio,
         country,
         passwordHash,
+        userType,
         status
     } = req.body;
 
