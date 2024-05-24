@@ -137,7 +137,7 @@ const updateCustomer = async (req, res) => {
         bio,
         country,
         passwordHash,
-        userType
+        status
     } = req.body;
 
 
@@ -183,7 +183,8 @@ const updateCustomer = async (req, res) => {
               bio,
               country,
               passwordHash,
-              userType
+              userType,
+              status
             },
             { new: true }
           );
