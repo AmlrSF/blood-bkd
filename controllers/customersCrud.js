@@ -33,18 +33,18 @@ const registerCustomer = async (req, res) => {
             return res.status(201).json({ success: false, error: 'Email already in use' });
         }
 
-        // // Generate a salt
-        // const salt = await bcrypt.genSalt(10);
+        // Generate a salt
+        const salt = await  bcrypt.genSalt(10);
 
-        // // Hash the password using the generated salt
-        // const hash = await bcrypt.hash(password, salt);
+        // Hash the password using the generated salt
+        const hash = await  bcrypt.hash(password.toString(), salt);
 
         // Create a new customer with the hashed password
         const newCustomer = new Customer({
             firstName: fname,
             lastName: lname,
             email,
-            passwordHash: password,
+            passwordHash: hash,
             userType,
         });
 
@@ -70,7 +70,7 @@ const loginCustomer = async (req, res) => {
         }
 
         
-        const passwordMatch =  password === customer.passwordHash;
+        const passwordMatch =   bcrypt.compare(password, customer.passwordHash);
 
         if (!passwordMatch) {
             return res.status(200).json({success:false, error: 'Invalid password' });
@@ -95,7 +95,7 @@ const loginCustomer = async (req, res) => {
             
         });
 
-        res.status(200).json({ message: 'Login successful', token, customer });
+        res.status(200).json({success:true, message: 'Login successful', token, customer });
     } catch (error) {
         console.error('Error during login:', error);
         res.status(500).json({ error: 'Internal server error' });

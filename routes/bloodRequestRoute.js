@@ -6,7 +6,8 @@ const {
     getBloodRequestById,
     updateBloodRequestById,
     deleteBloodRequestById,
-    activateBloodRequest
+    activateBloodRequest,
+    transfuse
 } = require('../controllers/bloodRequestController');
 
 router.route('/')
@@ -20,6 +21,9 @@ router.route('/:id')
 
 router.route('/:id/Activaterequest')
     .put(activateBloodRequest)
+
+router.route('/:id/transfuse')
+    .delete(transfuse)
 
 
 module.exports = router;

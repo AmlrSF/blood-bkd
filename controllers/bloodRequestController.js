@@ -3,6 +3,7 @@ const BloodBag = require('../schema/BloodBag');
 
 const createBloodRequest = async (req, res) => {
   try {
+    console.log(req.body);
     const bloodRequest = new BloodRequestByAdmission(req.body);
     await bloodRequest.save();
     res.status(201).json(bloodRequest);
@@ -129,11 +130,36 @@ const activateBloodRequest = async (req, res) => {
 };
 
 
+const transfuse = async(req,res) =>{
+
+  try {
+    const bloodRequest = await BloodRequestByAdmission.findById(req.params.id);
+
+    if (!bloodRequest) {
+      return res.status(200).json({ success: false, message: 'Blood request not found' });
+    }
+
+    console.log(bloodRequest)
+    bloodRequest.reservedBloodBags.forEach(element => {
+      console.log(element.toString());
+    });
+    await BloodBag.deleteMany({ _id: { $in: bloodRequest.reservedBloodBags.map(bag=>bag._id) }});;
+
+    await BloodRequestByAdmission.findByIdAndDelete(req.params.id);
+  
+    res.status(200).json({ message: 'Blood request deleted successfully' });
+
+  }catch {
+
+  }
+}
+
 module.exports = {
   createBloodRequest,
   getAllBloodRequests,
   getBloodRequestById,
   updateBloodRequestById,
   deleteBloodRequestById,
-  activateBloodRequest
+  activateBloodRequest,
+  transfuse
 };
