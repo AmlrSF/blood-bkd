@@ -99,7 +99,8 @@ const activateBloodRequest = async (req, res) => {
     const availableBags = await BloodBag.find({
       type: bloodRequest.bloodType + bloodRequest.rhesus,
       product: bloodRequest.product,
-      status: 'Available'
+      status: 'Available',
+      expireDate: { $gt: new Date() }
     });
 
     // Check if there are enough available bags to fulfill the request
